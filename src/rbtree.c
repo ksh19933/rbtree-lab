@@ -306,11 +306,11 @@ int rbtree_erase(rbtree *t, node_t *p) {
   return 0;
 }
 int node_to_array(const rbtree *t, const node_t *n, key_t *arr, int i){
-  arr[i] = n->key;
-  i++;
   if(n->left != t->nil){
     i = node_to_array(t, n->left, arr, i);
   }
+  arr[i] = n->key;
+  i++;
   if(n->right != t->nil){
     i = node_to_array(t, n->right, arr, i);
   }
@@ -321,37 +321,6 @@ int node_to_array(const rbtree *t, const node_t *n, key_t *arr, int i){
 int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
   // TODO: implement to_array
   node_to_array(t, t->root, arr, 0);
-  return 0;
-}
-
-int main(){
-  rbtree *t = new_rbtree();
-  rbtree_insert(t, 1);
-  rbtree_insert(t, 2);
-  rbtree_insert(t, 3);
-  rbtree_insert(t, 4);
-  rbtree_insert(t, 5);
-  rbtree_insert(t, 6);
-  rbtree_insert(t, 7);
-  rbtree_insert(t, 8);
-  // node_t *es = rbtree_find(t, 8);
-  // printf("%d\n", es->key);
-  // rbtree_erase(t, es);
-  int n = 8;
-  key_t *res = calloc(n, sizeof(key_t));
-  rbtree_to_array(t, res, n);
-  printf("[");
-  for (int i = 0; i < n; i++) {
-    printf("%d: ", res[i]);
-    node_t *node = rbtree_find(t, res[i]);
-    if(node->color == RBTREE_RED){
-      printf("RED, ");
-    }else{
-      printf("BLACK,");
-    }
-  }
-  printf("]\n");
-  delete_rbtree(t);
   return 0;
 }
 
