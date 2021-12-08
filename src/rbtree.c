@@ -270,6 +270,9 @@ void rb_delete_fixup(rbtree *t, node_t *target){
   target->color = RBTREE_BLACK;
 }
 int rbtree_erase(rbtree *t, node_t *p) {
+  if(p == NULL){
+    return 0;
+  }
   // TODO: implement erase
   // 삭제 진행
   node_t *target = p;
@@ -305,50 +308,56 @@ int rbtree_erase(rbtree *t, node_t *p) {
   free(p);
   return 0;
 }
-void node_to_array(const rbtree *t, const node_t *n, key_t *arr, int *i){
+int node_to_array(const rbtree *t, const node_t *n, key_t *arr, int i){
+  arr[i++] = n->key;
   if(n->left != t->nil){
-    node_to_array(t, n->left, arr, i);
+    i = node_to_array(t, n->left, arr, i);
   }
-  arr[(*i)++] = n->key;
   if(n->right != t->nil){
-    node_to_array(t, n->right, arr, i);
+    i = node_to_array(t, n->right, arr, i);
   }
+  return i;
 }
 
 
 int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
-  int i = 0;
   // TODO: implement to_array
-  node_to_array(t, t->root, arr, &i);
+  node_to_array(t, t->root, arr, 0);
   return 0;
 }
-// int main(void){
+
+
+// int main(){
 //   rbtree *t = new_rbtree();
-//   rbtree_insert(t, 1);
-//   rbtree_insert(t, 2);
-//   rbtree_insert(t, 3);
-//   rbtree_insert(t, 4);
+//   rbtree_insert(t, 10);
 //   rbtree_insert(t, 5);
-//   rbtree_insert(t, 6);
-//   rbtree_insert(t, 7);
 //   rbtree_insert(t, 8);
-//   // node_t *es = rbtree_find(t, 8);
-//   // printf("%d\n", es->key);
-//   // rbtree_erase(t, es);
+//   rbtree_insert(t, 34);
+//   rbtree_insert(t, 67);
+//   rbtree_insert(t, 23);
+//   rbtree_insert(t, 156);
+//   rbtree_insert(t, 24);
+//   rbtree_insert(t, 2);
+//   rbtree_insert(t, 12);
+//   rbtree_erase(t, rbtree_find(t, 34));
+//   rbtree_erase(t, rbtree_find(t, 156));
 //   int n = 8;
 //   key_t *res = calloc(n, sizeof(key_t));
 //   rbtree_to_array(t, res, n);
 //   printf("[");
 //   for (int i = 0; i < n; i++) {
-//     printf("%d: ", res[i]);
-//     node_t *node = rbtree_find(t, res[i]);
-//     if(node->color == RBTREE_RED){
-//       printf("RED, ");
-//     }else{
-//       printf("BLACK,");
-//     }
+//   printf(" %d:", res[i]);
+//   node_t *node = rbtree_find(t, res[i]);
+//   if(node->color == RBTREE_RED){
+//     printf("RED, ");
+//   }else{
+//     printf("BLACK,");
+//   }
 //   }
 //   printf("]\n");
-//   delete_rbtree(t);
+//   node_t *min = rbtree_min(t);
+//   printf("최소:%d ", min->key);
+//   node_t *max = rbtree_max(t);
+//   printf("최대:%d ", max->key);
 //   return 0;
 // }
