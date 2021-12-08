@@ -308,56 +308,19 @@ int rbtree_erase(rbtree *t, node_t *p) {
   free(p);
   return 0;
 }
-int node_to_array(const rbtree *t, const node_t *n, key_t *arr, int i){
-  arr[i++] = n->key;
-  if(n->left != t->nil){
-    i = node_to_array(t, n->left, arr, i);
+void node_to_array(const rbtree *t, const node_t *n, key_t *arr, int *i, const size_t num){
+  if (*i >= num || n == t->nil){
+    return;
   }
-  if(n->right != t->nil){
-    i = node_to_array(t, n->right, arr, i);
-  }
-  return i;
+  node_to_array(t, n->left, arr, i, num);
+  arr[(*i)++] = n->key;
+  node_to_array(t, n->right, arr, i, num);
 }
 
 
 int rbtree_to_array(const rbtree *t, key_t *arr, const size_t n) {
   // TODO: implement to_array
-  node_to_array(t, t->root, arr, 0);
+  int i = 0;
+  node_to_array(t, t->root, arr, &i, n);
   return 0;
 }
-
-
-// int main(){
-//   rbtree *t = new_rbtree();
-//   rbtree_insert(t, 10);
-//   rbtree_insert(t, 5);
-//   rbtree_insert(t, 8);
-//   rbtree_insert(t, 34);
-//   rbtree_insert(t, 67);
-//   rbtree_insert(t, 23);
-//   rbtree_insert(t, 156);
-//   rbtree_insert(t, 24);
-//   rbtree_insert(t, 2);
-//   rbtree_insert(t, 12);
-//   rbtree_erase(t, rbtree_find(t, 34));
-//   rbtree_erase(t, rbtree_find(t, 156));
-//   int n = 8;
-//   key_t *res = calloc(n, sizeof(key_t));
-//   rbtree_to_array(t, res, n);
-//   printf("[");
-//   for (int i = 0; i < n; i++) {
-//   printf(" %d:", res[i]);
-//   node_t *node = rbtree_find(t, res[i]);
-//   if(node->color == RBTREE_RED){
-//     printf("RED, ");
-//   }else{
-//     printf("BLACK,");
-//   }
-//   }
-//   printf("]\n");
-//   node_t *min = rbtree_min(t);
-//   printf("최소:%d ", min->key);
-//   node_t *max = rbtree_max(t);
-//   printf("최대:%d ", max->key);
-//   return 0;
-// }
